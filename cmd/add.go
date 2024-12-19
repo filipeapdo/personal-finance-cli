@@ -21,6 +21,21 @@ func AddIncome(financeData *data.FinanceData, monthName string, day int, amount 
 	return nil
 }
 
+func AddExpense(financeData *data.FinanceData, monthName string, day int, amount float64) error {
+	month, err := findMonth(financeData, monthName)
+	if err != nil {
+		return err
+	}
+
+	if err := validateDay(day, month); err != nil {
+		return err
+	}
+
+	month.Days[day-1].Expense += amount
+
+	return nil
+}
+
 func findMonth(financeData *data.FinanceData, monthName string) (*data.Month, error) {
 	for i := range financeData.Months {
 		if financeData.Months[i].Name == monthName {

@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"errors"
 	"fmt"
 	"strconv"
 	"strings"
@@ -39,23 +38,38 @@ func handleView(parts []string) {
 }
 
 func handleAddCommand(parts []string, financeData *data.FinanceData) error {
-	if len(parts) < 4 {
-		return errors.New("Usage: add [month] [day] [income]")
+	if len(parts) < 5 {
+		return fmt.Errorf("Usage: add [income | expense] [month] [day] [amount]")
 	}
 
-	month := parts[1]
-	day, err := strconv.Atoi(parts[2])
+	addType := parts[1]
+	month := parts[2]
+	day, err := strconv.Atoi(parts[3])
 	if err != nil {
 		return fmt.Errorf("invalid day: %v", err)
 	}
 
-	income, err := strconv.ParseFloat(parts[3], 64)
-	if err != nil || income < 0 {
+	amount, err := strconv.ParseFloat(parts[4], 64)
+	if err != nil || amount < 0 {
 		return fmt.Errorf("invalid income: %v", err)
 	}
 
-	err = AddIncome(financeData, month, day, income)
+	switch addType {
+	case "income":
+		err = AddIncome(financeData, month, day, amount)
+		if err != nil {
+			return fmt.Errorf("error adding income: %v", err)
+		}
+		fmt.Printf("Successfully added %.2f income to %s, day %d.\n", amount, month, day)
+	case "expense":
+		err = AddExpense(financeData, month, day, amount)
+		if err != nil {
+			return fmt.Errorf("error adding expense: %v", err)
+		}
+		fmt.Printf("Successfully added %.2f expense to %s, day %d.\n", amount, month, day)
+	default:
+		return fmt.Errorf("invalid type: must be 'income' or 'expense'")
+	}
 
-	fmt.Printf("Successfully added %.2f income to %s, day %d.\n", income, month, day)
 	return nil
 }
