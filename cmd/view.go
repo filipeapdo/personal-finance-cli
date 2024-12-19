@@ -6,9 +6,6 @@ import (
 	"github.com/filipeapdo/personal-finance-cli/data"
 )
 
-// Fake data (replace with actual data later)
-var financeData = data.MockFinanceData()
-
 func viewMonth(month string) {
 	m, err := findMonthByName(month)
 	if err != nil {

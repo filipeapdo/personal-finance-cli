@@ -5,7 +5,12 @@ import (
 	"fmt"
 	"os"
 	"strings"
+
+	"github.com/filipeapdo/personal-finance-cli/data"
 )
+
+// Fake data (replace with actual data later)
+var financeData = data.MockFinanceData()
 
 func StartREPL() {
 	fmt.Println("Welcome to the Personal Finance CLI!")
