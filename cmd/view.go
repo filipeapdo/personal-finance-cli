@@ -2,12 +2,13 @@ package cmd
 
 import (
 	"fmt"
+	"sort"
 
 	"github.com/filipeapdo/personal-finance-cli/data"
 )
 
-func viewMonth(month string) {
-	m, err := findMonthByName(month)
+func viewMonth(month string, financeData *data.FinanceData) {
+	m, err := findMonthByName(month, financeData)
 	if err != nil {
 		fmt.Println(err)
 		return
@@ -16,7 +17,7 @@ func viewMonth(month string) {
 	printMonthSummary(m)
 }
 
-func findMonthByName(month string) (*data.Month, error) {
+func findMonthByName(month string, financeData *data.FinanceData) (*data.Month, error) {
 	for _, m := range financeData.Months {
 		if m.Name == month {
 			return &m, nil
@@ -26,11 +27,12 @@ func findMonthByName(month string) (*data.Month, error) {
 }
 
 func printMonthSummary(month *data.Month) {
+	sortDays(month)
 	fmt.Printf("\nFinancial data for %s:\n", month.Name)
-	fmt.Println("Day | Income  | Expense | Daily   | Balance")
-	fmt.Println("-----------------------------------------")
+	fmt.Println("Day | Income    | Expense   | Daily     | Balance")
+	fmt.Println("-----------------------------------------------------")
 	for _, day := range month.Days {
-		fmt.Printf("%2d  | %7.2f | %7.2f | %7.2f | %7.2f\n",
+		fmt.Printf("%2d  | %9.2f | %9.2f | %9.2f | %9.2f\n",
 			day.Day, day.Income, day.Expense, day.Daily, day.Balance)
 	}
 	fmt.Println("\nSummary:")
@@ -38,4 +40,10 @@ func printMonthSummary(month *data.Month) {
 	fmt.Printf("Total Expense: %.2f\n", month.Summary.TotalExpense)
 	fmt.Printf("Total Daily:   %.2f\n", month.Summary.TotalDaily)
 	fmt.Printf("Final Balance: %.2f\n\n", month.Summary.FinalBalance)
+}
+
+func sortDays(month *data.Month) {
+	sort.Slice(month.Days, func(i, j int) bool {
+		return month.Days[i].Day < month.Days[j].Day
+	})
 }
