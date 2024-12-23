@@ -20,5 +20,6 @@ type Month struct {
 }
 
 type FinanceData struct {
-	Months []Month `json:"months"`
+	Months   []Month `json:"months"`
+	FilePath string  `json:"filepath"`
 }

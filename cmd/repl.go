@@ -9,10 +9,7 @@ import (
 	"github.com/filipeapdo/personal-finance-cli/data"
 )
 
-// Fake data (replace with actual data later)
-var financeData = data.MockFinanceData()
-
-func StartREPL() {
+func StartREPL(fd *data.FinanceData) {
 	fmt.Println("Welcome to the Personal Finance CLI!")
 	fmt.Println("Try 'help' to see available commands or 'exit' to quit.")
 
@@ -23,7 +20,7 @@ func StartREPL() {
 
 		input, err := reader.ReadString('\n')
 		if err != nil {
-			fmt.Println("Error reading input: ", err)
+			fmt.Println("error reading input: ", err)
 			continue
 		}
 
@@ -37,6 +34,6 @@ func StartREPL() {
 			break
 		}
 
-		handleCommand(input)
+		handleCommand(fd, input)
 	}
 }

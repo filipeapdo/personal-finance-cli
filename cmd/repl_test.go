@@ -1,6 +1,7 @@
 package cmd
 
 import (
+	"os"
 	"strings"
 	"testing"
 
@@ -11,12 +12,20 @@ func TestHandleAddCommand(t *testing.T) {
 	// Create mock finance data
 	financeData := data.MockFinanceData()
 
+	// Schedule cleanup to remove test_finance_data.json
+	t.Cleanup(func() {
+		err := os.Remove(financeData.FilePath)
+		if err != nil {
+			t.Errorf("failed to delete test_finance_data.json: %v", err)
+		}
+	})
+
 	// Test case: Valid add income command
 	t.Run("Valid Add Income Command", func(t *testing.T) {
 		input := "add income January 1 200.5"
 		parts := strings.Fields(input)
 
-		err := handleAddCommand(parts, &financeData)
+		err := handleAddCommand(&financeData, parts)
 		if err != nil {
 			t.Fatalf("uexpected error: %v", err)
 		}
@@ -33,7 +42,7 @@ func TestHandleAddCommand(t *testing.T) {
 		input := "add expense January 1 15.0"
 		parts := strings.Fields(input)
 
-		err := handleAddCommand(parts, &financeData)
+		err := handleAddCommand(&financeData, parts)
 		if err != nil {
 			t.Fatalf("uexpected error: %v", err)
 		}

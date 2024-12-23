@@ -6,8 +6,8 @@ import (
 	"os"
 )
 
-func SaveFinanceData(data FinanceData, filename string) error {
-	file, err := os.Create(filename)
+func SaveFinanceData(data *FinanceData) error {
+	file, err := os.Create(data.FilePath)
 	if err != nil {
 		return fmt.Errorf("could not create file: %v", err)
 	}
@@ -22,10 +22,19 @@ func SaveFinanceData(data FinanceData, filename string) error {
 	return nil
 }
 
-func LoadFinanceData(filename string) (FinanceData, error) {
+func LoadFinanceData(filename string) (*FinanceData, error) {
 	file, err := os.Open(filename)
+	if os.IsNotExist(err) {
+		newFinanceData := &FinanceData{}
+		err = SaveFinanceData(newFinanceData)
+		if err != nil {
+			return nil, err
+		}
+		return newFinanceData, nil
+	}
+
 	if err != nil {
-		return FinanceData{}, fmt.Errorf("could not open file: %v", err)
+		return &FinanceData{}, fmt.Errorf("could not open file: %v", err)
 	}
 	defer file.Close()
 
@@ -33,8 +42,8 @@ func LoadFinanceData(filename string) (FinanceData, error) {
 	decoder := json.NewDecoder(file)
 	err = decoder.Decode(&data)
 	if err != nil {
-		return FinanceData{}, fmt.Errorf("could not decode data: %v", err)
+		return &FinanceData{}, fmt.Errorf("could not decode data: %v", err)
 	}
 
-	return data, nil
+	return &data, nil
 }

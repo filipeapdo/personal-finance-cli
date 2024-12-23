@@ -49,5 +49,5 @@ func MockFinanceData() FinanceData {
 		})
 	}
 
-	return FinanceData{Months: months}
+	return FinanceData{Months: months, FilePath: "test_finance_data.json"}
 }
