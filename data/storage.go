@@ -25,7 +25,7 @@ func SaveFinanceData(data *FinanceData) error {
 func LoadFinanceData(filename string) (*FinanceData, error) {
 	file, err := os.Open(filename)
 	if os.IsNotExist(err) {
-		newFinanceData := &FinanceData{}
+		newFinanceData := &FinanceData{FilePath: filename}
 		err = SaveFinanceData(newFinanceData)
 		if err != nil {
 			return nil, err
