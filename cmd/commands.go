@@ -8,7 +8,7 @@ import (
 	"github.com/filipeapdo/personal-finance-cli/data"
 )
 
-func handleCommand(input string) {
+func handleCommand(fd *data.FinanceData, input string) {
 	parts := strings.Fields(input)
 	command := parts[0]
 
@@ -16,9 +16,12 @@ func handleCommand(input string) {
 	case "help":
 		showHelp()
 	case "view":
-		handleView(parts)
+		err := handleView(fd, parts)
+		if err != nil {
+			fmt.Println(err)
+		}
 	case "add":
-		err := handleAddCommand(parts, &financeData)
+		err := handleAddCommand(fd, parts)
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -28,22 +31,23 @@ func handleCommand(input string) {
 	}
 }
 
-func handleView(parts []string) {
+func handleView(fd *data.FinanceData, parts []string) error {
 	if len(parts) < 2 {
-		fmt.Println("Usage: view [month].")
-		return
+		return fmt.Errorf("usage: view [month]")
 	}
 	month := parts[1]
-	viewMonth(month)
+	viewMonth(month, fd)
+
+	return nil
 }
 
-func handleAddCommand(parts []string, financeData *data.FinanceData) error {
+func handleAddCommand(fd *data.FinanceData, parts []string) error {
 	if len(parts) < 5 {
-		return fmt.Errorf("Usage: add [income | expense] [month] [day] [amount]")
+		return fmt.Errorf("usage: add [income | expense] [month] [day] [amount]")
 	}
 
 	addType := parts[1]
-	month := parts[2]
+	monthName := parts[2]
 	day, err := strconv.Atoi(parts[3])
 	if err != nil {
 		return fmt.Errorf("invalid day: %v", err)
@@ -51,24 +55,12 @@ func handleAddCommand(parts []string, financeData *data.FinanceData) error {
 
 	amount, err := strconv.ParseFloat(parts[4], 64)
 	if err != nil || amount < 0 {
-		return fmt.Errorf("invalid income: %v", err)
+		return fmt.Errorf("invalid amount: %v", err)
 	}
 
-	switch addType {
-	case "income":
-		err = AddIncome(financeData, month, day, amount)
-		if err != nil {
-			return fmt.Errorf("error adding income: %v", err)
-		}
-		fmt.Printf("Successfully added %.2f income to %s, day %d.\n", amount, month, day)
-	case "expense":
-		err = AddExpense(financeData, month, day, amount)
-		if err != nil {
-			return fmt.Errorf("error adding expense: %v", err)
-		}
-		fmt.Printf("Successfully added %.2f expense to %s, day %d.\n", amount, month, day)
-	default:
-		return fmt.Errorf("invalid type: must be 'income' or 'expense'")
+	err = addAmount(fd, addType, monthName, day, amount)
+	if err != nil {
+		return err
 	}
 
 	return nil
