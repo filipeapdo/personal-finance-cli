@@ -14,6 +14,7 @@ func SaveFinanceData(data *FinanceData) error {
 	defer file.Close()
 
 	enconder := json.NewEncoder(file)
+	enconder.SetIndent("", " ")
 	err = enconder.Encode(data)
 	if err != nil {
 		return fmt.Errorf("could not encode data: %v", err)
@@ -25,7 +26,7 @@ func SaveFinanceData(data *FinanceData) error {
 func LoadFinanceData(filename string) (*FinanceData, error) {
 	file, err := os.Open(filename)
 	if os.IsNotExist(err) {
-		newFinanceData := &FinanceData{FilePath: filename}
+		newFinanceData := &FinanceData{Months: []Month{}, FilePath: filename}
 		err = SaveFinanceData(newFinanceData)
 		if err != nil {
 			return nil, err
