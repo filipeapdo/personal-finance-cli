@@ -24,8 +24,11 @@ func addAmount(fd *data.FinanceData, addType, monthName string, day int, amount 
 	case "expense":
 		month.Days[dayIndex].Expense += amount
 		fmt.Printf("Successfully added %.2f expense to %s, day %d.\n", amount, monthName, day)
+	case "daily":
+		month.Days[dayIndex].Daily += amount
+		fmt.Printf("Successfully added %.2f daily expense to %s, day %d.\n", amount, monthName, day)
 	default:
-		return fmt.Errorf("invalid type: must be 'income' or 'expense'")
+		return fmt.Errorf("invalid type: must be 'income', 'expense' or 'daily'")
 	}
 
 	err = data.SaveFinanceData(fd)

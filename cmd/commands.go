@@ -43,7 +43,7 @@ func handleView(fd *data.FinanceData, parts []string) error {
 
 func handleAddCommand(fd *data.FinanceData, parts []string) error {
 	if len(parts) < 5 {
-		return fmt.Errorf("usage: add [income | expense] [month] [day] [amount]")
+		return fmt.Errorf("usage: add [income | expense | daily] [month] [day] [amount]")
 	}
 
 	addType := parts[1]

@@ -53,4 +53,21 @@ func TestHandleAddCommand(t *testing.T) {
 			t.Errorf("expense mismatch: expected %.2f, got %.2f", expected, actual)
 		}
 	})
+
+	// Test case: Valid add daily expense command
+	t.Run("Valid Add Daily expense Command", func(t *testing.T) {
+		input := "add daily January 1 0.99"
+		parts := strings.Fields(input)
+
+		err := handleAddCommand(&financeData, parts)
+		if err != nil {
+			t.Fatalf("uexpected error: %v", err)
+		}
+
+		expected := 20.99
+		actual := financeData.Months[0].Days[0].Daily
+		if actual != expected {
+			t.Errorf("daily expense mismatch: expected %.2f, got %.2f", expected, actual)
+		}
+	})
 }
