@@ -7,20 +7,20 @@ func MockFinanceData() FinanceData {
 	}
 
 	var months []Month
-	for i, monthName := range monthNames {
+	for _, monthName := range monthNames {
 		var days []Day
 		for day := 1; day <= 30; day++ {
-			income := float64((i+1)*100 + day*10)
-			expense := float64((i+1)*50 + day*5)
-			daily := float64(20)
-			balance := income - expense - daily
+			income := 10.0
+			expense := 8.0
+			daily := 1.0
+			// balance := income - expense - daily
 
 			days = append(days, Day{
 				Day:     day,
 				Income:  income,
 				Expense: expense,
 				Daily:   daily,
-				Balance: balance,
+				Balance: 0.0,
 			})
 		}
 

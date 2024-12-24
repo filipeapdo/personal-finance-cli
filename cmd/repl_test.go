@@ -30,7 +30,7 @@ func TestHandleInsertCommand(t *testing.T) {
 			t.Fatalf("uexpected error: %v", err)
 		}
 
-		expected := 310.5
+		expected := 210.5
 		actual := financeData.Months[0].Days[0].Income
 		if actual != expected {
 			t.Errorf("income mismatch: expected %.2f, got %.2f", expected, actual)
@@ -47,7 +47,7 @@ func TestHandleInsertCommand(t *testing.T) {
 			t.Fatalf("uexpected error: %v", err)
 		}
 
-		expected := 70.0
+		expected := 23.0
 		actual := financeData.Months[0].Days[0].Expense
 		if actual != expected {
 			t.Errorf("expense mismatch: expected %.2f, got %.2f", expected, actual)
@@ -64,7 +64,7 @@ func TestHandleInsertCommand(t *testing.T) {
 			t.Fatalf("uexpected error: %v", err)
 		}
 
-		expected := 20.99
+		expected := 1.99
 		actual := financeData.Months[0].Days[0].Daily
 		if actual != expected {
 			t.Errorf("daily expense mismatch: expected %.2f, got %.2f", expected, actual)
