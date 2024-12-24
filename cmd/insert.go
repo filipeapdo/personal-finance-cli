@@ -29,6 +29,10 @@ func insertAmount(fd *data.FinanceData, insertType, monthName string, day int, a
 	}
 	fmt.Printf("Successfully inserted %.2f %s to %s, day %d.\n", amount, insertType, monthName, day)
 
+	// to-do: review with error handlings
+	data.SortFinanceData(fd)
+	calculateBalance(fd)
+
 	err = data.SaveFinanceData(fd)
 	if err != nil {
 		return err
@@ -38,7 +42,7 @@ func insertAmount(fd *data.FinanceData, insertType, monthName string, day int, a
 }
 
 func findOrCreateMonth(fd *data.FinanceData, monthName string) (*data.Month, error) {
-	err := validateMonth(monthName)
+	err := data.ValidateMonth(monthName)
 	if err != nil {
 		return &data.Month{}, err
 	}
@@ -63,23 +67,9 @@ func findOrCreateMonth(fd *data.FinanceData, monthName string) (*data.Month, err
 	return &fd.Months[len(fd.Months)-1], nil
 }
 
-func validateMonth(monthName string) error {
-	monthNames := []string{
-		"January", "February", "March", "April", "May", "June",
-		"July", "August", "September", "October", "November", "December",
-	}
-
-	for _, m := range monthNames {
-		if m == monthName {
-			return nil
-		}
-	}
-
-	return fmt.Errorf("invalid month name, valid month's names are: %v", monthNames)
-}
-
 func findOrCreateDay(month *data.Month, day int) (int, error) {
-	err := validateDay(day)
+	// to-do: review this function!!!
+	err := data.ValidateDay(month.Name, day, 2024)
 	if err != nil {
 		return -1, err
 	}
@@ -100,13 +90,4 @@ func findOrCreateDay(month *data.Month, day int) (int, error) {
 	month.Days = append(month.Days, newDay)
 
 	return len(month.Days) - 1, nil
-}
-
-// to-do: validate the day based on months, 31/30/28or29
-func validateDay(day int) error {
-	if day < 1 || day > 31 {
-		return fmt.Errorf("invalid day, valid days are: between 1 and 31")
-	}
-
-	return nil
 }

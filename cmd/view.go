@@ -2,7 +2,6 @@ package cmd
 
 import (
 	"fmt"
-	"sort"
 
 	"github.com/filipeapdo/personal-finance-cli/data"
 )
@@ -27,7 +26,6 @@ func findMonthByName(month string, financeData *data.FinanceData) (*data.Month, 
 }
 
 func printMonthSummary(month *data.Month) {
-	sortDays(month)
 	fmt.Printf("\nFinancial data for %s:\n", month.Name)
 	fmt.Println("Day | Income    | Expense   | Daily     | Balance")
 	fmt.Println("-----------------------------------------------------")
@@ -40,10 +38,4 @@ func printMonthSummary(month *data.Month) {
 	fmt.Printf("Total Expense: %.2f\n", month.Summary.TotalExpense)
 	fmt.Printf("Total Daily:   %.2f\n", month.Summary.TotalDaily)
 	fmt.Printf("Final Balance: %.2f\n\n", month.Summary.FinalBalance)
-}
-
-func sortDays(month *data.Month) {
-	sort.Slice(month.Days, func(i, j int) bool {
-		return month.Days[i].Day < month.Days[j].Day
-	})
 }
