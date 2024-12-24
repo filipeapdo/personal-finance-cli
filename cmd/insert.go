@@ -6,7 +6,7 @@ import (
 	"github.com/filipeapdo/personal-finance-cli/data"
 )
 
-func addAmount(fd *data.FinanceData, addType, monthName string, day int, amount float64) error {
+func insertAmount(fd *data.FinanceData, insertType, monthName string, day int, amount float64) error {
 	month, err := findOrCreateMonth(fd, monthName)
 	if err != nil {
 		return err
@@ -17,19 +17,17 @@ func addAmount(fd *data.FinanceData, addType, monthName string, day int, amount 
 		return err
 	}
 
-	switch addType {
+	switch insertType {
 	case "income":
 		month.Days[dayIndex].Income += amount
-		fmt.Printf("Successfully added %.2f income to %s, day %d.\n", amount, monthName, day)
 	case "expense":
 		month.Days[dayIndex].Expense += amount
-		fmt.Printf("Successfully added %.2f expense to %s, day %d.\n", amount, monthName, day)
 	case "daily":
 		month.Days[dayIndex].Daily += amount
-		fmt.Printf("Successfully added %.2f daily expense to %s, day %d.\n", amount, monthName, day)
 	default:
 		return fmt.Errorf("invalid type: must be 'income', 'expense' or 'daily'")
 	}
+	fmt.Printf("Successfully inserted %.2f %s to %s, day %d.\n", amount, insertType, monthName, day)
 
 	err = data.SaveFinanceData(fd)
 	if err != nil {

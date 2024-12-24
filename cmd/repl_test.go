@@ -8,7 +8,7 @@ import (
 	"github.com/filipeapdo/personal-finance-cli/data"
 )
 
-func TestHandleAddCommand(t *testing.T) {
+func TestHandleInsertCommand(t *testing.T) {
 	// Create mock finance data
 	financeData := data.MockFinanceData()
 
@@ -20,12 +20,12 @@ func TestHandleAddCommand(t *testing.T) {
 		}
 	})
 
-	// Test case: Valid add income command
-	t.Run("Valid Add Income Command", func(t *testing.T) {
-		input := "add income January 1 200.5"
+	// Test case: Valid insert income command
+	t.Run("Valid Insert Income Command", func(t *testing.T) {
+		input := "insert income January 1 200.5"
 		parts := strings.Fields(input)
 
-		err := handleAddCommand(&financeData, parts)
+		err := handleInsertCommand(&financeData, parts)
 		if err != nil {
 			t.Fatalf("uexpected error: %v", err)
 		}
@@ -37,12 +37,12 @@ func TestHandleAddCommand(t *testing.T) {
 		}
 	})
 
-	// Test case: Valid add expense command
-	t.Run("Valid Add Expense Command", func(t *testing.T) {
-		input := "add expense January 1 15.0"
+	// Test case: Valid insert expense command
+	t.Run("Valid Insert Expense Command", func(t *testing.T) {
+		input := "insert expense January 1 15.0"
 		parts := strings.Fields(input)
 
-		err := handleAddCommand(&financeData, parts)
+		err := handleInsertCommand(&financeData, parts)
 		if err != nil {
 			t.Fatalf("uexpected error: %v", err)
 		}
@@ -54,12 +54,12 @@ func TestHandleAddCommand(t *testing.T) {
 		}
 	})
 
-	// Test case: Valid add daily expense command
-	t.Run("Valid Add Daily expense Command", func(t *testing.T) {
-		input := "add daily January 1 0.99"
+	// Test case: Valid insert daily expense command
+	t.Run("Valid Insert Daily expense Command", func(t *testing.T) {
+		input := "insert daily January 1 0.99"
 		parts := strings.Fields(input)
 
-		err := handleAddCommand(&financeData, parts)
+		err := handleInsertCommand(&financeData, parts)
 		if err != nil {
 			t.Fatalf("uexpected error: %v", err)
 		}

@@ -20,8 +20,8 @@ func handleCommand(fd *data.FinanceData, input string) {
 		if err != nil {
 			fmt.Println(err)
 		}
-	case "add":
-		err := handleAddCommand(fd, parts)
+	case "insert":
+		err := handleInsertCommand(fd, parts)
 		if err != nil {
 			fmt.Println(err)
 		}
@@ -41,12 +41,12 @@ func handleView(fd *data.FinanceData, parts []string) error {
 	return nil
 }
 
-func handleAddCommand(fd *data.FinanceData, parts []string) error {
+func handleInsertCommand(fd *data.FinanceData, parts []string) error {
 	if len(parts) < 5 {
-		return fmt.Errorf("usage: add [income | expense | daily] [month] [day] [amount]")
+		return fmt.Errorf("usage: insert [income | expense | daily] [month] [day] [amount]")
 	}
 
-	addType := parts[1]
+	insertType := parts[1]
 	monthName := parts[2]
 	day, err := strconv.Atoi(parts[3])
 	if err != nil {
@@ -58,7 +58,7 @@ func handleAddCommand(fd *data.FinanceData, parts []string) error {
 		return fmt.Errorf("invalid amount: %v", err)
 	}
 
-	err = addAmount(fd, addType, monthName, day, amount)
+	err = insertAmount(fd, insertType, monthName, day, amount)
 	if err != nil {
 		return err
 	}
