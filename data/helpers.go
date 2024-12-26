@@ -59,10 +59,8 @@ func ValidateDay(monthName string, day, year int) error {
 	}
 
 	maxDay = months[monthName].MaxDays
-	if monthName == "February" {
-		if isLeapYear(year) {
-			maxDay = 29
-		}
+	if monthName == "February" && isLeapYear(year) {
+		maxDay = 29
 	}
 
 	if day < 1 || day > maxDay {
