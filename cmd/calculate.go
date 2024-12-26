@@ -18,3 +18,21 @@ func calculateBalance(fd *data.FinanceData) {
 		}
 	}
 }
+
+func calculateSummary(fd *data.FinanceData) {
+	for monthIndex := range fd.Months {
+		month := &fd.Months[monthIndex]
+		month.Summary.TotalIncome = 0
+		month.Summary.TotalExpense = 0
+		month.Summary.TotalDaily = 0
+		month.Summary.FinalBalance = 0
+		for _, day := range month.Days {
+			month.Summary.TotalIncome += day.Income
+			month.Summary.TotalExpense += day.Expense
+			month.Summary.TotalDaily += day.Daily
+		}
+		if len(month.Days) > 0 {
+			month.Summary.FinalBalance = month.Days[len(month.Days)-1].Balance
+		}
+	}
+}

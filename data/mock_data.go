@@ -13,23 +13,20 @@ func MockFinanceData() FinanceData {
 			income := 10.0
 			expense := 8.0
 			daily := 1.0
-			// balance := income - expense - daily
 
 			days = append(days, Day{
 				Day:     day,
 				Income:  income,
 				Expense: expense,
 				Daily:   daily,
-				Balance: 0.0,
 			})
 		}
 
-		var totalIncome, totalExpense, totalDaily, finalBalance float64
+		var totalIncome, totalExpense, totalDaily float64
 		for _, day := range days {
 			totalIncome += day.Income
 			totalExpense += day.Expense
 			totalDaily += day.Daily
-			finalBalance = day.Balance
 		}
 
 		months = append(months, Month{
@@ -44,7 +41,6 @@ func MockFinanceData() FinanceData {
 				TotalIncome:  totalIncome,
 				TotalExpense: totalExpense,
 				TotalDaily:   totalDaily,
-				FinalBalance: finalBalance,
 			},
 		})
 	}

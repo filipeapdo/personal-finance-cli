@@ -32,6 +32,7 @@ func insertAmount(fd *data.FinanceData, insertType, monthName string, day int, a
 	// to-do: review with error handlings
 	data.SortFinanceData(fd)
 	calculateBalance(fd)
+	calculateSummary(fd)
 
 	err = data.SaveFinanceData(fd)
 	if err != nil {
